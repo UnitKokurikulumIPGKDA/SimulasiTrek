@@ -3,92 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Simulasi Pembinaan Trek Olahraga - Berdasarkan Buku Garis Panduan KPM</title>
+    <title>Simulasi Pembinaan Trek Olahraga (SOP KPM 2010)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <style>
-        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; background: #0a0e0a; color: white; touch-action: none; }
+        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; background: #050805; color: white; touch-action: none; }
         
-        /* UI Penerangan di Bahagian Atas */
         #ui-panel { 
-            position: absolute; top: 10px; left: 50%; transform: translateX(-50%); 
-            width: 95%; max-width: 850px; background: rgba(10, 20, 10, 0.92); 
-            padding: 15px; border-radius: 15px; border: 2px solid #2ecc71; 
-            z-index: 100; box-shadow: 0 5px 25px rgba(0,0,0,0.7);
-            backdrop-filter: blur(10px);
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); 
+            width: 90%; max-width: 800px; 
+            background: rgba(0, 0, 0, 0.4); 
+            padding: 15px; border-radius: 12px; 
+            border: 1px solid rgba(46, 204, 113, 0.5); 
+            z-index: 100; 
+            backdrop-filter: blur(2px); 
+            text-shadow: 1px 1px 2px #000; 
         }
-
+        
         .step-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid rgba(46, 204, 113, 0.4); padding-bottom: 5px; }
-        .step-indicator { color: #2ecc71; font-weight: bold; font-size: 0.75rem; text-transform: uppercase; }
-        h2 { margin: 0; font-size: 1rem; color: #fff; }
-        p { margin: 8px 0; font-size: 0.85rem; line-height: 1.5; color: #eee; text-align: left; border-left: 3px solid #f1c40f; padding-left: 12px; min-height: 50px; }
-
+        .step-indicator { color: #2ecc71; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; }
+        h2 { margin: 0; font-size: 1.1rem; color: #fff; }
+        p { margin: 8px 0; font-size: 0.9rem; line-height: 1.5; color: #f8f9fa; border-left: 3px solid #f1c40f; padding-left: 12px; min-height: 45px; }
+        
         .btn-group { display: flex; gap: 10px; margin-top: 10px; align-items: center; }
-        button { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; font-size: 0.8rem; text-transform: uppercase; transition: 0.2s; }
-        .btn-nav { background: #2ecc71; color: #000; }
+        button { flex: 1; padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; font-size: 0.8rem; text-transform: uppercase; transition: 0.2s; }
+        .btn-nav { background: rgba(46, 204, 113, 0.8); color: #fff; text-shadow: 1px 1px 1px #000; border: 1px solid #2ecc71;}
+        .btn-nav:hover { background: #2ecc71; color: #000; text-shadow: none; }
         .btn-nav:active { transform: scale(0.95); }
-        .btn-nav:disabled { background: #333; color: #777; cursor: not-allowed; }
-
-        .scale-control { flex: 3; background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; display: flex; align-items: center; gap: 10px; border: 1px solid #444; }
+        .btn-nav:disabled { background: rgba(51, 51, 51, 0.5); color: #777; cursor: not-allowed; border: 1px solid #444; }
+        
+        .scale-control { flex: 2; background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 8px; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.2); }
         .scale-control label { font-size: 0.7rem; color: #2ecc71; font-weight: bold; white-space: nowrap; }
-        .scale-control select { background: #111; color: white; border: 1px solid #2ecc71; padding: 5px; border-radius: 5px; cursor: pointer; font-size: 0.75rem; width: 100%; }
-
-        /* Panel Data di Bahagian Bawah-Kanan */
+        .scale-control select { background: rgba(17, 17, 17, 0.7); color: white; border: 1px solid #2ecc71; padding: 5px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; width: 100%; }
+        
         .info-panel { 
-            position: absolute; bottom: 15px; right: 15px; 
-            background: rgba(0,0,0,0.85); padding: 12px; 
-            border-radius: 12px; font-size: 0.72rem; 
-            border: 1px solid rgba(255,255,255,0.1); 
-            width: 260px; z-index: 50; pointer-events: none;
-            backdrop-filter: blur(5px);
+            position: absolute; top: 20px; right: 20px; 
+            background: rgba(0,0,0,0.3); padding: 12px; 
+            border-radius: 12px; font-size: 0.75rem; 
+            border: 1px solid rgba(255,255,255,0.2); 
+            width: 250px; z-index: 50; pointer-events: none; 
+            backdrop-filter: blur(2px);
+            text-shadow: 1px 1px 2px #000;
         }
         .data-list { margin: 8px 0 0 0; color: #f1c40f; list-style: none; padding: 0; font-weight: bold; line-height: 1.6; }
-        .data-list li { display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0; }
+        .data-list li { display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.2); padding: 2px 0; }
+        .reference-box { margin-top: 10px; padding-top: 6px; font-size: 0.65rem; color: #85c1e9; line-height: 1.3; }
         
-        .stagger-table { margin-top: 10px; font-size: 0.65rem; width: 100%; border-top: 1px solid #444; padding-top: 5px; }
-        .stagger-table th { color: #2ecc71; text-align: left; }
-        .stagger-table td { color: #fff; }
+        /* Gaya Hak Cipta */
+        .copyright {
+            margin-top: 12px; padding-top: 8px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            font-size: 0.65rem; color: #bdc3c7; line-height: 1.4;
+            text-align: center; font-style: italic;
+        }
 
-        #canvas-container { width: 100vw; height: 100vh; }
-        .warning-text { color: #e74c3c; font-weight: bold; font-size: 0.6rem; margin-top: 5px; display: block; text-align: right; }
-        
-        /* Gaya Rujukan & Hakcipta */
-        .reference-box { margin-top: 12px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 0.62rem; color: #3498db; line-height: 1.3; text-align: left; }
-        .copyright { font-size: 0.55rem; color: #888; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px; text-align: center; font-style: italic; }
+        #toggleUIBtn {
+            position: absolute; top: 20px; left: 20px; z-index: 200;
+            background: rgba(0, 0, 0, 0.6); border: 1px solid #2ecc71;
+            color: #2ecc71; padding: 8px 15px; border-radius: 8px;
+            cursor: pointer; font-weight: bold; font-size: 0.8rem;
+            backdrop-filter: blur(2px); transition: 0.3s;
+        }
+        #toggleUIBtn:hover { background: rgba(46, 204, 113, 0.3); color: #fff; }
+
+        #canvas-container { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; }
     </style>
 </head>
 <body>
-    <div class="info-panel">
-        <b style="color:#2ecc71">VERIFIKASI TEKNIKAL (BUKU GP)</b>
-        <ul class="data-list" id="data-display">
-            <li>Jarak Trek: <span id="val-total">200</span>m</li>
-            <li>Lurus (L): <span id="val-straight">36.53</span>m</li>
-            <li>Jejari (R): <span id="val-mdr">18.00</span>m</li>
-            <li style="color:#e67e22">Pepenjuru: <span id="val-diag">51.29</span>m</li>
+    <button id="toggleUIBtn">👁️ Sembunyi Panel</button>
+
+    <div class="info-panel" id="panel-info">
+        <b style="color:#2ecc71; font-size: 0.85rem;">DATA GEOMETRI KPM</b>
+        <ul class="data-list">
+            <li>Lurus (AB/CD): <span id="val-straight">-</span>m</li>
+            <li>Jejari Dalam: <span id="val-mdr">-</span>m</li>
+            <li>Jarak JK: <span id="val-jk">-</span>m</li>
+            <li>Jejari Besar: <span id="val-rbesar">-</span>m</li>
+            <li style="color:#e67e22; font-size: 0.85rem;">Pepenjuru: <span id="val-diag">-</span>m</li>
         </ul>
-        
-        <div class="stagger-table">
-            <table>
-                <thead>
-                    <tr><th>Lorong</th><th>Stagger (m)</th></tr>
-                </thead>
-                <tbody id="stagger-body">
-                    <!-- Dinamik -->
-                </tbody>
-            </table>
-        </div>
-
-        <span class="warning-text">*Diagonal MESTI SAMA!</span>
-
-        <div class="reference-box">
-            <b style="color: #fff;">SUMBER RUJUKAN:</b><br>
-            Buku Garis Panduan Pengurusan Kejohanan Balapan dan Padang (Olahraga) di Sekolah.<br>
-            Bahagian Sukan, Kementerian Pelajaran Malaysia (Mei 2010).
-        </div>
-
+        <div class="reference-box">Berdasarkan Lampiran 4 Buku KPM (2010). Model Lengkung 3-Pusat.</div>
         <div class="copyright">
-            Dibangunkan oleh Haniff Faizal Bin Chek Ani<br>
-            Unit Kokurikulum IPG Kampus Darulaman
+            © Dibangunkan oleh Haniff Faizal Bin Chek Ani<br>Unit Kokurikulum IPG Kampus Darulaman
         </div>
     </div>
 
@@ -96,21 +91,19 @@
 
     <div id="ui-panel">
         <div class="step-header">
-            <h2 id="step-title">Langkah 1</h2>
-            <div class="step-indicator" id="step-num">Langkah 1 / 10</div>
+            <h2 id="step-title">Langkah</h2>
+            <div class="step-indicator" id="step-num">1 / 15</div>
         </div>
-        
-        <p id="step-desc">Memulakan perincian...</p>
-
+        <p id="step-desc">Penerangan...</p>
         <div class="btn-group">
             <button class="btn-nav" id="prevBtn" disabled>KEMBALI</button>
             <div class="scale-control">
                 <label>PILIH TREK:</label>
                 <select id="track-select" onchange="updateTrackConfig()">
-                    <option value="150">150 Meter (MDR 15.00m)</option>
-                    <option value="200" selected>200 Meter (MDR 18.00m)</option>
-                    <option value="300">300 Meter (MDR 19.23m)</option>
-                    <option value="400">400 Meter (MDR 30.48m)</option>
+                    <option value="150">150 Meter</option>
+                    <option value="200" selected>200 Meter</option>
+                    <option value="300">300 Meter</option>
+                    <option value="400">400 Meter</option>
                 </select>
             </div>
             <button class="btn-nav" id="nextBtn">SETERUSNYA</button>
@@ -118,82 +111,108 @@
     </div>
 
     <script>
+        let uiVisible = true;
+        document.getElementById('toggleUIBtn').onclick = () => {
+            uiVisible = !uiVisible;
+            document.getElementById('ui-panel').style.display = uiVisible ? 'block' : 'none';
+            document.getElementById('panel-info').style.display = uiVisible ? 'block' : 'none';
+            document.getElementById('toggleUIBtn').innerHTML = uiVisible ? '👁️ Sembunyi Panel' : '👁️ Papar Panel';
+            document.getElementById('toggleUIBtn').style.color = uiVisible ? '#2ecc71' : '#f1c40f';
+        };
+
+        const TRACK_CONFIG = {
+            LANE_WIDTH: 1.22,
+            COLORS: { DATUM: 0xff3333, GUIDE: 0x3498db, FINAL: 0xffffff, DIAG: 0xe67e22, CENTER: 0x9b59b6, RADIUS: 0xf1c40f }
+        };
+
+        const trackDataKPM = {
+            "150": { lurus: 22.64, jejariDalaman: 15.00, jk: 5.00, jejariBesar: 20.00 },
+            "200": { lurus: 36.53, jejariDalaman: 18.00, jk: 6.60, jejariBesar: 24.60 },
+            "300": { lurus: 79.11, jejariDalaman: 19.23, jk: 10.00, jejariBesar: 29.23 },
+            "400": { lurus: 85.69, jejariDalaman: 30.48, jk: 17.71, jejariBesar: 48.19 }
+        };
+
         let scene, camera, renderer, controls, objectsGroup;
         let currentStep = 0;
+        let currentData = trackDataKPM["200"];
 
-        // Data mutlak daripada Lampiran 4 Buku Garis Panduan
-        const trackData = {
-            "150": { straight: 22.64, radius: 15.00, total: 150 },
-            "200": { straight: 36.53, radius: 18.00, total: 200 },
-            "300": { straight: 79.11, radius: 19.23, total: 300 },
-            "400": { straight: 85.69, radius: 30.48, total: 400 }
-        };
-
-        let currentData = trackData["200"];
-        let laneWidth = 1.22;
-
-        const getStepContent = (stepIdx) => {
-            const L = currentData.straight;
-            const R = currentData.radius;
-            const halfL = (L / 2).toFixed(2);
-            const diag = Math.sqrt(Math.pow(L, 2) + Math.pow(R * 2, 2)).toFixed(2);
-            
-            const content = [
-                {
-                    title: "1. Penetapan  Pusat (Centre Track)",
-                    desc: `Tanam pancang besi di tengah padang. Ini adalah rujukan '0'. Tarik garisan aksis untuk orientasi mengikut spesifikasi Buku GP.`
-                },
-                {
-                    title: "2. Menanda Pancang A & B (Hujung Lurus)",
-                    desc: `Ukur ${halfL}m ke kiri (Pancang A) dan ${halfL}m ke kanan (Pancang B) dari pusat. Jarak lurus rasmi: ${L.toFixed(2)}m.`
-                },
-                {
-                    title: "3. Penyikuan 3-4-5 di Paku A",
-                    desc: `Gunakan teknik tali 3m-4m-5m untuk menjamin sudut 90°. Pastikan hipotenus tepat 5m sebelum memancang pancang sudut.`
-                },
-                {
-                    title: "4. Unjuran Paku C & D (Lebar Kiri)",
-                    desc: `Tarik garisan 90° ke atas/bawah sejauh MDR (${R.toFixed(2)}m). Tanam Pancang C & D sebagai titik mula lengkung (Lampiran 4).`
-                },
-                {
-                    title: "5. Unjuran Paku E & F (Lebar Kanan)",
-                    desc: `Ulangi penyikuan di Pancang B. Tanam Pancang E & F pada jarak MDR (${R.toFixed(2)}m) untuk melengkapkan rangka kotak.`
-                },
-                {
-                    title: "6. Semakan Pepenjuru (Verifikasi)",
-                    desc: `Ukur silang C-F dan D-E. Nilai MESTI SAMA (${diag}m). Jika beza, laras pancang sehingga diagonal tepat sama.`
-                },
-                {
-                    title: "7. Menarik Tali Rangka Kotak",
-                    desc: `Hubungkan paku C-E dan D-F dengan tali penanda. Inilah rangka dasar trek larian anda.`
-                },
-                {
-                    title: "8. Melukis Garis Lurus (SOP KPM)",
-                    desc: `Lukis garisan putih kekal 5cm di atas tali penanda lurus. Inilah kawasan pecutan utama lorong dalam.`
-                },
-                {
-                    title: "9. Menanda Paksi Lengkung (Radius)",
-                    desc: `Gunakan Pancang A dan B sebagai paksi. Tarik tali MDR (${R.toFixed(2)}m) untuk melukis lengkung yang bertemu tepat di bucu kotak.`
-                },
-                {
-                    title: "10. Penyempurnaan Lorong & Stagger",
-                    desc: `Tambah 8 lorong (lebar 1.22m). Garisan mula lorong 2-8 dianjakkan (stagger) mengikut formula [w(n-1)] x 2π.`
-                }
-            ];
-            return content[stepIdx];
-        };
-
+        // PENSTRUKTURAN 15 LANGKAH TERPERINCI
         const steps = [
-            { setup: () => { drawPeg(0, 0, "PUSAT"); drawDashedLine(0, -30, 0, 30, 0x444444); moveCamera(0, 10, 25); } },
-            { setup: () => { drawPeg(0, 0, "PUSAT"); drawPeg(-currentData.straight/2, 0, "A"); drawPeg(currentData.straight/2, 0, "B"); drawDashedLine(-currentData.straight/2, 0, currentData.straight/2, 0, 0xffff00); moveCamera(0, 20, 40); } },
-            { setup: () => { drawPeg(-currentData.straight/2, 0, "A"); drawPythagoras(-currentData.straight/2, 0, 1); moveCamera(-currentData.straight/2, 6, 12); } },
-            { setup: () => { drawPeg(-currentData.straight/2, 0, "A"); drawDashedLine(-currentData.straight/2, -currentData.radius, -currentData.straight/2, currentData.radius, 0x2ecc71); drawPeg(-currentData.straight/2, currentData.radius, "C"); drawPeg(-currentData.straight/2, -currentData.radius, "D"); moveCamera(-currentData.straight/2, 25, 40); } },
-            { setup: () => { drawPeg(currentData.straight/2, 0, "B"); drawDashedLine(currentData.straight/2, -currentData.radius, currentData.straight/2, currentData.radius, 0x2ecc71); drawPeg(currentData.straight/2, currentData.radius, "E"); drawPeg(currentData.straight/2, -currentData.radius, "F"); moveCamera(currentData.straight/2, 25, 40); } },
-            { setup: () => { drawBoxFrame(currentData.straight, currentData.radius * 2, 0x444444); drawDashedLine(-currentData.straight/2, currentData.radius, currentData.straight/2, -currentData.radius, 0xe67e22); drawDashedLine(-currentData.straight/2, -currentData.radius, currentData.straight/2, currentData.radius, 0xe67e22); moveCamera(0, 40, 60); } },
-            { setup: () => { drawBoxFrame(currentData.straight, currentData.radius * 2, 0xffffff); moveCamera(0, 30, 50); } },
-            { setup: () => { drawWhiteStraights(currentData.straight, currentData.radius * 2); moveCamera(0, 20, 40); } },
-            { setup: () => { drawWhiteStraights(currentData.straight, currentData.radius * 2); drawPeg(-currentData.straight/2, 0, "Aksi"); drawRadiusVisual(-currentData.straight/2, 0, currentData.radius); moveCamera(-currentData.straight/2, 12, 25); } },
-            { setup: () => { drawWhiteStraights(currentData.straight, currentData.radius * 2); drawFullLanes(8, 1.22, currentData.radius, currentData.straight/2); drawStaggers(8, 1.22, currentData.radius, currentData.straight/2); moveCamera(0, 90, 130); } }
+            { 
+                title: "1. Menentukan Paksi Utama & Pusat Padang", 
+                desc: "Pancang paku di titik paling tengah padang (Datum). Tarik tali paksi melintang dan memanjang sebagai rujukan koordinat awal.",
+                setup: () => { drawCenterAxis(); moveCamera(0, 80, 100); } 
+            },
+            { 
+                title: "2. Menanda Kotak Lurus Asas (Titik A, B, C, D)", 
+                desc: "Ukur panjang LURUS dari titik tengah. Kemudian ukur kelebaran kotak menggunakan formula: Lebar = (Jejari x 2) + JK.",
+                setup: () => { drawCenterAxis(); drawBoxOnly(); moveCamera(0, 70, 90); } 
+            },
+            { 
+                title: "3. Verifikasi Pepenjuru (Diagonal)", 
+                desc: "LANGKAH KRITIKAL: Tarik tali mengukur jarak silang A ke C, dan B ke D. Kedua-dua bacaan MESTI TEPAT sama panjang untuk memastikan sudut tepat 90°.",
+                setup: () => { drawBoxOnly(); drawDiagonals(); moveCamera(0, 60, 80); } 
+            },
+            { 
+                title: "4. Menanda Pusat Lengkung Atas (Titik J & F)", 
+                desc: "Pada paksi Y, ukur jarak sejauh (JK ÷ 2) ke atas dari titik tengah. Pancang paku J (Kiri) dan F (Kanan).",
+                setup: () => { drawBoxOnly(); drawPaksiJF(); moveCamera(0, 50, 70); } 
+            },
+            { 
+                title: "5. Menanda Pusat Lengkung Bawah (Titik K & E)", 
+                desc: "Ulangi ukuran sejauh (JK ÷ 2) ke arah bawah pula. Pancang paku K (Kiri) dan E (Kanan).",
+                setup: () => { drawBoxOnly(); drawPaksiJF(); drawPaksiKE(); moveCamera(0, 50, 70); } 
+            },
+            { 
+                title: "6. Mencari Pusat Lengkung Besar (Titik H & G)", 
+                desc: "Gunakan geometri Segi Tiga Sama Sisi dari tapak J-K dan F-E. Ukur tinggi segi tiga untuk memancang paku puncak H dan G.",
+                setup: () => { drawBoxOnly(); drawAllPaksi(); moveCamera(0, 60, 80); } 
+            },
+            { 
+                title: "7. Melukis Garisan Lurus Asas (AB & CD)", 
+                desc: "Gunakan mesin cat kapur, tarik garisan lurus yang menyambungkan Titik A ke B (Bawah) dan Titik D ke C (Atas).",
+                setup: () => { drawAllPaksi(); drawStraightsOnly(); moveCamera(0, 80, 100); } 
+            },
+            { 
+                title: "8. Membina Lengkung Atas Kiri (Titik D ke N)", 
+                desc: "Tancapkan paku pita ukur pada titik J. Tarik pita sejauh JEJARI DALAM ke titik D, dan lukis lengkung sehingga sudut 150° (Titik N).",
+                setup: () => { drawAllPaksi(); drawStraightsOnly(); drawCurve_DN(); moveCamera(-currentData.lurus/2, 40, 50); } 
+            },
+            { 
+                title: "9. Membina Lengkung Bawah Kiri (Titik A ke P)", 
+                desc: "Tancapkan paku pita ukur pada titik K. Tarik pita sejauh JEJARI DALAM ke titik A, dan lukis lengkung sehingga sudut 210° (Titik P).",
+                setup: () => { drawAllPaksi(); drawStraightsOnly(); drawCurve_DN(); drawCurve_AP(); moveCamera(-currentData.lurus/2, 40, 50); } 
+            },
+            { 
+                title: "10. Menyambung Lengkung Besar Kiri (Titik N ke P)", 
+                desc: "Alihkan paku pita ukur ke titik H. Tarik pita sejauh JEJARI BESAR ke titik N, dan cantumkan lukisan lengkung tersebut ke titik P.",
+                setup: () => { drawAllPaksi(); drawStraightsOnly(); drawCurve_DN(); drawCurve_AP(); drawCurve_NP(); moveCamera(-currentData.lurus/2, 45, 60); } 
+            },
+            { 
+                title: "11. Membina Lengkung Kanan (Titik C ke M & B ke L)", 
+                desc: "Beralih ke sebelah kanan padang. Tancapkan paku di F dan lukis C ke M. Kemudian tancapkan paku di E dan lukis B ke L menggunakan JEJARI DALAM.",
+                setup: () => { drawAllPaksi(); drawStraightsOnly(); drawLeftCurves(); drawCurve_RightSmall(); moveCamera(currentData.lurus/2, 50, 60); } 
+            },
+            { 
+                title: "12. Menyambung Lengkung Besar Kanan (Titik M ke L)", 
+                desc: "Tancapkan paku di titik G. Tarik pita sejauh JEJARI BESAR ke titik M, dan cantumkan lukisan lengkung ke titik L. Lengkung asas lengkap!",
+                setup: () => { drawAllPaksi(); drawStraightsOnly(); drawLeftCurves(); drawCurve_RightSmall(); drawCurve_RightBig(); moveCamera(currentData.lurus/2, 55, 70); } 
+            },
+            { 
+                title: "13. Semakan Keseluruhan Lorong 1", 
+                desc: "Perhatikan lengkung 3-Pusat (Basket-handle curve) kini bersambung dengan lancar membentuk Lorong 1 tanpa sebarang titik bersudut tajam.",
+                setup: () => { drawAllPaksi(); drawLanesLoop(1); moveCamera(0, 90, 120); } 
+            },
+            { 
+                title: "14. Pelebaran Kesemua 8 Lorong (1.22m)", 
+                desc: "Kekalkan paku pita ukur di paksi J,K,H dan E,F,G. Panjangkan pita ukur sebanyak 1.22m secara konsisten untuk melukis Lorong 2 hingga 8.",
+                setup: () => { drawAllPaksi(); drawFullKPM_Lanes(); moveCamera(0, 100, 140); } 
+            },
+            { 
+                title: "15. Penandaan Titik Stagger (Anjakan Mula)", 
+                desc: "Pelari lorong luar mempunyai jarak jejari yang lebih besar. Plot paku Stagger (Blok Kuning) mengikut formula bagi menyeimbangkan jarak larian pelari.",
+                setup: () => { drawFullKPM_Lanes(); drawKPMStaggers(); moveCamera(-currentData.lurus/2, 45, 60); } 
+            }
         ];
 
         function init() {
@@ -203,8 +222,6 @@
             scene.add(objectsGroup);
 
             camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 5000);
-            camera.position.set(0, 100, 150);
-
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
@@ -212,19 +229,21 @@
 
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
+            controls.maxPolarAngle = Math.PI / 2.1; 
 
             scene.add(new THREE.AmbientLight(0xffffff, 1.5));
             const sun = new THREE.DirectionalLight(0xffffff, 0.5);
             sun.position.set(50, 100, 50);
             scene.add(sun);
 
-            const ground = new THREE.Mesh(new THREE.PlaneGeometry(3000, 3000), new THREE.MeshPhongMaterial({ color: 0x1a2e16 }));
+            const ground = new THREE.Mesh(new THREE.PlaneGeometry(3000, 3000), new THREE.MeshPhongMaterial({ color: 0x122210 }));
             ground.rotation.x = -Math.PI / 2;
+            ground.position.y = -0.1;
             scene.add(ground);
-            scene.add(new THREE.GridHelper(1500, 100, 0x152515, 0x111111));
+            scene.add(new THREE.GridHelper(1500, 100, 0x1a3318, 0x111111));
 
-            document.getElementById('nextBtn').onclick = nextStep;
-            document.getElementById('prevBtn').onclick = prevStep;
+            document.getElementById('nextBtn').onclick = () => { currentStep = (currentStep + 1) % steps.length; updateUI(); };
+            document.getElementById('prevBtn').onclick = () => { if(currentStep > 0) { currentStep--; updateUI(); } };
 
             updateTrackConfig();
             animate();
@@ -232,130 +251,290 @@
 
         function updateTrackConfig() {
             const val = document.getElementById('track-select').value;
-            currentData = trackData[val];
-            const diag = Math.sqrt(Math.pow(currentData.straight, 2) + Math.pow(currentData.radius * 2, 2));
+            currentData = trackDataKPM[val];
+            
+            const W = (currentData.jejariDalaman * 2) + currentData.jk;
+            const diag = Math.sqrt(Math.pow(currentData.lurus, 2) + Math.pow(W, 2));
 
-            document.getElementById('val-total').textContent = currentData.total;
-            document.getElementById('val-straight').textContent = currentData.straight.toFixed(2);
-            document.getElementById('val-mdr').textContent = currentData.radius.toFixed(2);
+            document.getElementById('val-straight').textContent = currentData.lurus.toFixed(2);
+            document.getElementById('val-mdr').textContent = currentData.jejariDalaman.toFixed(2);
+            document.getElementById('val-jk').textContent = currentData.jk.toFixed(2);
+            document.getElementById('val-rbesar').textContent = currentData.jejariBesar.toFixed(2);
             document.getElementById('val-diag').textContent = diag.toFixed(2);
-
-            const tbody = document.getElementById('stagger-body');
-            tbody.innerHTML = '';
-            for(let n=1; n<=8; n++) {
-                const stagger = n === 1 ? 0 : (laneWidth * (n - 1) * 2 * Math.PI);
-                tbody.innerHTML += `<tr><td>L${n}</td><td>${stagger.toFixed(2)}m</td></tr>`;
-            }
 
             updateUI();
         }
 
         function updateUI() {
             const s = steps[currentStep];
-            const content = getStepContent(currentStep);
-            document.getElementById('step-num').textContent = `Langkah ${currentStep + 1} / 10`;
-            document.getElementById('step-title').textContent = content.title;
-            document.getElementById('step-desc').textContent = content.desc;
-            document.getElementById('nextBtn').textContent = currentStep === steps.length - 1 ? "ULANG" : "SETERUSNYA";
+            document.getElementById('step-num').textContent = `Langkah ${currentStep + 1} / 15`;
+            document.getElementById('step-title').textContent = s.title;
+            document.getElementById('step-desc').textContent = s.desc;
             document.getElementById('prevBtn').disabled = currentStep === 0;
+            document.getElementById('nextBtn').textContent = (currentStep === steps.length - 1) ? "ULANG" : "SETERUSNYA";
 
             while(objectsGroup.children.length > 0) objectsGroup.remove(objectsGroup.children[0]);
             s.setup();
         }
 
-        // --- Fungsi Geometri ---
+        // --- FUNGSI ALATAN LUKISAN MODULAR ---
         function drawDashedLine(x1, z1, x2, z2, color) {
-            const mat = new THREE.LineDashedMaterial({ color, dashSize: 2, gapSize: 1 });
+            const mat = new THREE.LineDashedMaterial({ color, dashSize: 2, gapSize: 1, linewidth: 2 });
             const points = [new THREE.Vector3(x1, 0.2, z1), new THREE.Vector3(x2, 0.2, z2)];
             const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), mat);
             line.computeLineDistances();
             objectsGroup.add(line);
         }
 
-        function drawPythagoras(x, z, dir) {
-            const mat = new THREE.LineBasicMaterial({ color: 0x2ecc71, linewidth: 3 });
-            const points = [new THREE.Vector3(x, 0.3, z), new THREE.Vector3(x + (3 * dir), 0.3, z), new THREE.Vector3(x, 0.3, z + 4), new THREE.Vector3(x, 0.3, z)];
+        function drawSolidLine(x1, z1, x2, z2, color, thick=false) {
+            const mat = new THREE.LineBasicMaterial({ color, linewidth: thick ? 5 : 2 });
+            const points = [new THREE.Vector3(x1, 0.2, z1), new THREE.Vector3(x2, 0.2, z2)];
             objectsGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), mat));
-            addLabel("3m", x + (1.5 * dir), 0.6, z);
-            addLabel("4m", x, 0.6, z + 2);
-            addLabel("5m", x + (1.5 * dir), 0.6, z + 2, "#f1c40f");
         }
 
-        function drawBoxFrame(L, W, color) {
-            const points = [new THREE.Vector3(-L/2, 0.1, -W/2), new THREE.Vector3(L/2, 0.1, -W/2), new THREE.Vector3(L/2, 0.1, W/2), new THREE.Vector3(-L/2, 0.1, W/2), new THREE.Vector3(-L/2, 0.1, -W/2)];
-            objectsGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), new THREE.LineBasicMaterial({ color })));
-        }
-
-        function drawWhiteStraights(L, W) {
-            const mat = new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 5 });
-            [-W/2, W/2].forEach(z => {
-                const p = [new THREE.Vector3(-L/2, 0.2, z), new THREE.Vector3(L/2, 0.2, z)];
-                objectsGroup.add(new THREE.Line(geoFromPoints(p), mat));
-            });
-        }
-
-        function drawFullLanes(count, width, rStart, off) {
-            for(let i=0; i<=count; i++) {
-                const R = rStart + (i * width);
-                const mat = new THREE.LineBasicMaterial({ color: i === 0 ? 0xffffff : 0x666666 });
-                const c1 = new THREE.EllipseCurve(-off, 0, R, R, Math.PI/2, Math.PI*1.5, false, 0);
-                objectsGroup.add(new THREE.Line(geoFromPoints(c1.getPoints(50).map(p => new THREE.Vector3(p.x, 0.15, p.y))), mat));
-                const c2 = new THREE.EllipseCurve(off, 0, R, R, -Math.PI/2, Math.PI/2, false, 0);
-                objectsGroup.add(new THREE.Line(geoFromPoints(c2.getPoints(50).map(p => new THREE.Vector3(p.x, 0.15, p.y))), mat));
-                [-R, R].forEach(z => {
-                    const p = [new THREE.Vector3(-off, 0.15, z), new THREE.Vector3(off, 0.15, z)];
-                    objectsGroup.add(new THREE.Line(geoFromPoints(p), mat));
-                });
-            }
-        }
-
-        function geoFromPoints(pts) { return new THREE.BufferGeometry().setFromPoints(pts); }
-
-        function drawStaggers(count, width, rStart, off) {
-            for(let i=1; i<count; i++) {
-                const R = rStart + (i * width) + (width / 2);
-                const staggerLen = i * width * 2 * Math.PI;
-                const angle = staggerLen / R;
-                const posX = -off + Math.cos(Math.PI/2 + angle) * R;
-                const posZ = Math.sin(Math.PI/2 + angle) * R;
-                const marker = new THREE.Mesh(new THREE.PlaneGeometry(0.8, 0.2), new THREE.MeshBasicMaterial({ color: 0x2ecc71 }));
-                marker.rotation.x = -Math.PI/2;
-                marker.rotation.z = -angle;
-                marker.position.set(posX, 0.25, posZ);
-                objectsGroup.add(marker);
-                addLabel(`L${i+1}`, posX, 0.6, posZ, "#2ecc71");
-            }
-        }
-
-        function drawPeg(x, z, title) {
-            const peg = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 1), new THREE.MeshPhongMaterial({ color: 0xff3333 }));
-            peg.position.set(x, 0.5, z);
+        function drawPeg(x, z, title, color = TRACK_CONFIG.COLORS.DATUM) {
+            const peg = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 1.5), new THREE.MeshPhongMaterial({ color }));
+            peg.position.set(x, 0.75, z);
             objectsGroup.add(peg);
-            addLabel(title, x, 1.2, z);
+            addLabelText(title, x, 2.5, z, "#fff");
         }
 
-        function drawRadiusVisual(x, z, r) {
-            drawDashedLine(x, z, x, z + r, 0xf1c40f);
-            addLabel(`MDR: ${r.toFixed(2)}m`, x, 0.5, z + r/2);
-        }
-
-        function addLabel(text, x, y, z, color = "white") {
+        function addLabelText(text, x, y, z, color = "white") {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
-            canvas.width = 512; canvas.height = 128;
+            canvas.width = 256; canvas.height = 128;
             ctx.fillStyle = color;
-            ctx.font = 'bold 40px Arial';
+            ctx.font = 'bold 38px Arial';
             ctx.textAlign = 'center';
-            ctx.fillText(text, 256, 70);
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 4;
+            ctx.strokeText(text, 128, 70);
+            ctx.fillText(text, 128, 70);
             const texture = new THREE.CanvasTexture(canvas);
             const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture }));
-            sprite.scale.set(6, 1.5, 1);
+            sprite.scale.set(10, 5, 1);
             sprite.position.set(x, y, z);
             objectsGroup.add(sprite);
         }
 
-        function nextStep() { currentStep = (currentStep + 1) % steps.length; updateUI(); }
-        function prevStep() { if(currentStep > 0) { currentStep--; updateUI(); } }
+        function addTag(text, x, y, z, bgColor, textColor) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 500; canvas.height = 120;
+            
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(20, 10, 460, 100);
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(20, 10, 460, 100);
+
+            ctx.fillStyle = textColor;
+            ctx.font = 'bold 36px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, 250, 60);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture }));
+            sprite.scale.set(16, 4, 1);
+            sprite.position.set(x, y, z);
+            objectsGroup.add(sprite);
+        }
+
+        // --- FUNGSI LENGKUNG BERSERTA TALI PITA UKUR ---
+        function drawArcWithRadius(cx, cz, r, startA, endA, colorArc, showTape=true, label="") {
+            const mat = new THREE.LineBasicMaterial({ color: colorArc, linewidth: 5 });
+            const curve = new THREE.EllipseCurve(cx, cz, r, r, startA, endA, false, 0);
+            const points = curve.getPoints(50).map(p => new THREE.Vector3(p.x, 0.15, p.y));
+            objectsGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), mat));
+
+            if(showTape) {
+                // Pita ukur ke titik mula
+                const p1x = cx + Math.cos(startA)*r; const p1z = cz + Math.sin(startA)*r;
+                drawDashedLine(cx, cz, p1x, p1z, TRACK_CONFIG.COLORS.RADIUS);
+                
+                // Pita ukur ke titik akhir
+                const p2x = cx + Math.cos(endA)*r; const p2z = cz + Math.sin(endA)*r;
+                drawDashedLine(cx, cz, p2x, p2z, TRACK_CONFIG.COLORS.RADIUS);
+
+                if(label) {
+                    const midA = (startA + endA)/2;
+                    addTag(label, cx + Math.cos(midA)*(r/2.5), 1.0, cz + Math.sin(midA)*(r/2.5), 'rgba(241, 196, 15, 0.9)', '#000000');
+                }
+            }
+        }
+
+        // --- FUNGSI TUGASAN SPESIFIK 15 LANGKAH ---
+        function drawCenterAxis() {
+            drawDashedLine(-100, 0, 100, 0, TRACK_CONFIG.COLORS.CENTER); 
+            drawDashedLine(0, -100, 0, 100, TRACK_CONFIG.COLORS.CENTER); 
+            drawPeg(0, 0, "PUSAT PADANG", 0xf1c40f);
+        }
+
+        function drawBoxOnly() {
+            const L = currentData.lurus;
+            const W = (currentData.jejariDalaman * 2) + currentData.jk;
+            
+            drawDashedLine(-L/2, -W/2, L/2, -W/2, 0x888888);
+            drawDashedLine(-L/2, W/2, L/2, W/2, 0x888888);
+            drawDashedLine(-L/2, -W/2, -L/2, W/2, 0x888888);
+            drawDashedLine(L/2, -W/2, L/2, W/2, 0x888888);
+            
+            drawPeg(-L/2, -W/2, "A"); drawPeg(L/2, -W/2, "B");
+            drawPeg(L/2, W/2, "C"); drawPeg(-L/2, W/2, "D");
+            
+            addTag(`LURUS: ${L}m`, 0, 1.5, -W/2, 'rgba(52, 152, 219, 0.9)', '#ffffff');
+            addTag(`LEBAR: ${W.toFixed(2)}m`, -L/2, 1.5, 0, 'rgba(155, 89, 182, 0.9)', '#ffffff');
+        }
+
+        function drawDiagonals() {
+            const L = currentData.lurus;
+            const W = (currentData.jejariDalaman * 2) + currentData.jk;
+            
+            drawDashedLine(-L/2, -W/2, L/2, W/2, TRACK_CONFIG.COLORS.DIAG);
+            drawDashedLine(-L/2, W/2, L/2, -W/2, TRACK_CONFIG.COLORS.DIAG);
+            
+            const diagVal = Math.sqrt(Math.pow(L, 2) + Math.pow(W, 2)).toFixed(2);
+            addTag(`PEPENJURU: ${diagVal}m`, 0, 2.5, 0, 'rgba(230, 126, 34, 0.9)', '#ffffff');
+        }
+
+        function drawPaksiJF() {
+            const L = currentData.lurus; const JK = currentData.jk;
+            drawPeg(-L/2, JK/2, "J", TRACK_CONFIG.COLORS.GUIDE);
+            drawPeg(L/2, JK/2, "F", TRACK_CONFIG.COLORS.GUIDE);
+            drawDashedLine(-L/2, 0, -L/2, JK/2, 0x2ecc71);
+        }
+
+        function drawPaksiKE() {
+            const L = currentData.lurus; const JK = currentData.jk;
+            drawPeg(-L/2, -JK/2, "K", TRACK_CONFIG.COLORS.GUIDE);
+            drawPeg(L/2, -JK/2, "E", TRACK_CONFIG.COLORS.GUIDE);
+            drawDashedLine(-L/2, 0, -L/2, -JK/2, 0x2ecc71);
+            addTag(`Jarak JK: ${JK}m`, -L/2 - 5, 2.0, 0, 'rgba(46, 204, 113, 0.9)', '#000000');
+        }
+
+        function drawAllPaksi() {
+            drawPaksiJF(); drawPaksiKE();
+            const L = currentData.lurus; const JK = currentData.jk;
+            const h = JK * (Math.sqrt(3) / 2);
+            drawPeg(-L/2 + h, 0, "H", TRACK_CONFIG.COLORS.GUIDE);
+            drawPeg(L/2 - h, 0, "G", TRACK_CONFIG.COLORS.GUIDE);
+            
+            // Segi Tiga Kiri
+            drawDashedLine(-L/2, JK/2, -L/2, -JK/2, TRACK_CONFIG.COLORS.GUIDE);
+            drawDashedLine(-L/2, -JK/2, -L/2 + h, 0, TRACK_CONFIG.COLORS.GUIDE);
+            drawDashedLine(-L/2 + h, 0, -L/2, JK/2, TRACK_CONFIG.COLORS.GUIDE);
+            
+            // Segi Tiga Kanan
+            drawDashedLine(L/2, JK/2, L/2, -JK/2, TRACK_CONFIG.COLORS.GUIDE);
+            drawDashedLine(L/2, -JK/2, L/2 - h, 0, TRACK_CONFIG.COLORS.GUIDE);
+            drawDashedLine(L/2 - h, 0, L/2, JK/2, TRACK_CONFIG.COLORS.GUIDE);
+        }
+
+        function drawStraightsOnly() {
+            const L = currentData.lurus;
+            const W = (currentData.jejariDalaman * 2) + currentData.jk;
+            drawSolidLine(-L/2, -W/2, L/2, -W/2, TRACK_CONFIG.COLORS.FINAL, true);
+            drawSolidLine(-L/2, W/2, L/2, W/2, TRACK_CONFIG.COLORS.FINAL, true);
+            drawPeg(-L/2, -W/2, "A"); drawPeg(L/2, -W/2, "B");
+            drawPeg(L/2, W/2, "C"); drawPeg(-L/2, W/2, "D");
+        }
+
+        // --- FUNGSI LENGKUNG TERPERINCI (Langkah 8 hingga 12) ---
+        function drawCurve_DN() {
+            const leftX = -currentData.lurus/2; const zJ = currentData.jk/2; const R = currentData.jejariDalaman;
+            drawArcWithRadius(leftX, zJ, R, Math.PI/2, (5*Math.PI)/6, TRACK_CONFIG.COLORS.FINAL, true, "PITA JEJARI");
+        }
+        function drawCurve_AP() {
+            const leftX = -currentData.lurus/2; const zK = -currentData.jk/2; const R = currentData.jejariDalaman;
+            drawArcWithRadius(leftX, zK, R, (7*Math.PI)/6, (3*Math.PI)/2, TRACK_CONFIG.COLORS.FINAL, true, "PITA JEJARI");
+        }
+        function drawCurve_NP() {
+            const leftX = -currentData.lurus/2; const h = currentData.jk * (Math.sqrt(3)/2); const R_besar = currentData.jejariBesar;
+            drawArcWithRadius(leftX + h, 0, R_besar, (5*Math.PI)/6, (7*Math.PI)/6, TRACK_CONFIG.COLORS.FINAL, true, "JEJARI BESAR (H)");
+        }
+        
+        function drawLeftCurves() {
+            drawCurve_DN(); drawCurve_AP(); drawCurve_NP();
+        }
+
+        function drawCurve_RightSmall() {
+            const rightX = currentData.lurus/2; const zJ = currentData.jk/2; const zK = -currentData.jk/2; const R = currentData.jejariDalaman;
+            drawArcWithRadius(rightX, zJ, R, Math.PI/6, Math.PI/2, TRACK_CONFIG.COLORS.FINAL, true, "PITA JEJARI");
+            drawArcWithRadius(rightX, zK, R, (3*Math.PI)/2, (11*Math.PI)/6, TRACK_CONFIG.COLORS.FINAL, true, "");
+        }
+        function drawCurve_RightBig() {
+            const rightX = currentData.lurus/2; const h = currentData.jk * (Math.sqrt(3)/2); const R_besar = currentData.jejariBesar;
+            drawArcWithRadius(rightX - h, 0, R_besar, -Math.PI/6, Math.PI/6, TRACK_CONFIG.COLORS.FINAL, true, "JEJARI BESAR (G)");
+        }
+
+
+        // --- FUNGSI KESELURUHAN TREK ---
+        function drawLanesLoop(count) {
+            const L = currentData.lurus;
+            const R_base = currentData.jejariDalaman;
+            const R_besar_base = currentData.jejariBesar;
+            const JK = currentData.jk;
+            const h = JK * (Math.sqrt(3) / 2);
+            
+            const leftX = -L/2; const rightX = L/2;
+            const zJ = JK / 2; const zK = -JK / 2;
+
+            for(let i = 0; i <= count; i++) {
+                if(count === 1 && i === 1) break;
+                const laneOffset = i * TRACK_CONFIG.LANE_WIDTH;
+                const R = R_base + laneOffset;
+                const R_besar = R_besar_base + laneOffset;
+                
+                const mat = new THREE.LineBasicMaterial({ color: i === 0 ? 0xffffff : 0x777777, linewidth: i === 0 ? 5 : 2 });
+
+                function addArcSilent(cx, cz, radius, startAngle, endAngle) {
+                    const curve = new THREE.EllipseCurve(cx, cz, radius, radius, startAngle, endAngle, false, 0);
+                    const points = curve.getPoints(60).map(p => new THREE.Vector3(p.x, 0.15, p.y));
+                    objectsGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), mat));
+                }
+
+                addArcSilent(leftX, zJ, R, Math.PI/2, (5 * Math.PI)/6);
+                addArcSilent(leftX + h, 0, R_besar, (5 * Math.PI)/6, (7 * Math.PI)/6);
+                addArcSilent(leftX, zK, R, (7 * Math.PI)/6, (3 * Math.PI)/2);
+                
+                addArcSilent(rightX, zJ, R, Math.PI/6, Math.PI/2);
+                addArcSilent(rightX - h, 0, R_besar, -Math.PI/6, Math.PI/6);
+                addArcSilent(rightX, zK, R, (3 * Math.PI)/2, (11 * Math.PI)/6);
+
+                const straightZ = R + (JK / 2);
+                objectsGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(leftX, 0.15, straightZ), new THREE.Vector3(rightX, 0.15, straightZ)]), mat));
+                objectsGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(leftX, 0.15, -straightZ), new THREE.Vector3(rightX, 0.15, -straightZ)]), mat));
+            }
+        }
+
+        function drawFullKPM_Lanes() { drawLanesLoop(8); }
+
+        function drawKPMStaggers() {
+            const leftX = -currentData.lurus/2;
+            const zJ = currentData.jk / 2;
+            const R_base = currentData.jejariDalaman;
+            
+            drawDashedLine(leftX, zJ + R_base, leftX, zJ + R_base + (8 * TRACK_CONFIG.LANE_WIDTH), 0xf1c40f);
+            
+            for(let n = 1; n <= 8; n++) {
+                const laneOffset = (n - 1) * TRACK_CONFIG.LANE_WIDTH;
+                const R = R_base + laneOffset + (TRACK_CONFIG.LANE_WIDTH / 2);
+                
+                const staggerLen = (n - 1) * TRACK_CONFIG.LANE_WIDTH * Math.PI;
+                const angleRad = Math.PI/2 + (staggerLen / R);
+                
+                const posX = leftX + Math.cos(angleRad) * R;
+                const posZ = zJ + Math.sin(angleRad) * R;
+                
+                const marker = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.6, 0.3), new THREE.MeshPhongMaterial({ color: 0xf1c40f }));
+                marker.position.set(posX, 0.3, posZ);
+                marker.rotation.y = -angleRad;
+                objectsGroup.add(marker);
+                
+                addLabelText(`L${n}`, posX, 2.0, posZ, "#f1c40f");
+            }
+        }
 
         function moveCamera(x, y, z) {
             const target = new THREE.Vector3(x, y, z);
@@ -368,18 +547,9 @@
             }, 20);
         }
 
-        function animate() {
-            requestAnimationFrame(animate);
-            controls.update();
-            renderer.render(scene, camera);
-        }
-
+        function animate() { requestAnimationFrame(animate); controls.update(); renderer.render(scene, camera); }
         window.onload = init;
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+        window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
     </script>
 </body>
 </html>
