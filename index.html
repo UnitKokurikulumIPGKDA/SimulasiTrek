@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Simulasi Pembinaan Trek Olahraga (SOP KPM 2010)</title>
+    <title>Simulasi Pembinaan Trek Olahraga MPU3411 (Buku Garis Panduan Pengurusan Kejohanan Balapan dan Padang (Olahraga))</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <style>
@@ -81,7 +81,7 @@
             <li>Jejari Besar: <span id="val-rbesar">-</span>m</li>
             <li style="color:#e67e22; font-size: 0.85rem;">Pepenjuru: <span id="val-diag">-</span>m</li>
         </ul>
-        <div class="reference-box">Berdasarkan Lampiran 4 Buku KPM (2010). Model Lengkung 3-Pusat.</div>
+        <div class="reference-box">Berdasarkan Buku Garis Panduan Pengurusan Kejohanan Balapan dan Padang (Olahraga),2010. Model Lengkung 3-Pusat.</div>
         <div class="copyright">
             © Dibangunkan oleh Haniff Faizal Bin Chek Ani<br>Unit Kokurikulum IPG Kampus Darulaman
         </div>
@@ -149,8 +149,8 @@
                 setup: () => { drawCenterAxis(); drawBoxOnly(); moveCamera(0, 70, 90); } 
             },
             { 
-                title: "3. Verifikasi Pepenjuru (Diagonal)", 
-                desc: "LANGKAH KRITIKAL: Tarik tali mengukur jarak silang A ke C, dan B ke D. Kedua-dua bacaan MESTI TEPAT sama panjang untuk memastikan sudut tepat 90°.",
+                title: "3. Verifikasi Teorem Pythagoras (Pepenjuru)", 
+                desc: "LANGKAH KRITIKAL: Asas kotak bersudut 90° adalah bergantung kepada formula Teorem Pythagoras (a² + b² = c²). Tarik tali silang (A ke C, B ke D). Kedua-dua pepenjuru (c) MESTI TEPAT sama panjang.",
                 setup: () => { drawBoxOnly(); drawDiagonals(); moveCamera(0, 60, 80); } 
             },
             { 
@@ -383,8 +383,8 @@
             drawPeg(-L/2, -W/2, "A"); drawPeg(L/2, -W/2, "B");
             drawPeg(L/2, W/2, "C"); drawPeg(-L/2, W/2, "D");
             
-            addTag(`LURUS: ${L}m`, 0, 1.5, -W/2, 'rgba(52, 152, 219, 0.9)', '#ffffff');
-            addTag(`LEBAR: ${W.toFixed(2)}m`, -L/2, 1.5, 0, 'rgba(155, 89, 182, 0.9)', '#ffffff');
+            addTag(`LURUS (a): ${L}m`, 0, 1.5, -W/2, 'rgba(52, 152, 219, 0.9)', '#ffffff');
+            addTag(`LEBAR (b): ${W.toFixed(2)}m`, -L/2, 1.5, 0, 'rgba(52, 152, 219, 0.9)', '#ffffff');
         }
 
         function drawDiagonals() {
@@ -395,7 +395,9 @@
             drawDashedLine(-L/2, W/2, L/2, -W/2, TRACK_CONFIG.COLORS.DIAG);
             
             const diagVal = Math.sqrt(Math.pow(L, 2) + Math.pow(W, 2)).toFixed(2);
-            addTag(`PEPENJURU: ${diagVal}m`, 0, 2.5, 0, 'rgba(230, 126, 34, 0.9)', '#ffffff');
+            
+            addTag(`PYTHAGORAS: a² + b² = c²`, 0, 4.5, 0, 'rgba(155, 89, 182, 0.9)', '#ffffff');
+            addTag(`PEPENJURU (c): ${diagVal}m`, 0, 2.0, 0, 'rgba(230, 126, 34, 0.9)', '#ffffff');
         }
 
         function drawPaksiJF() {
