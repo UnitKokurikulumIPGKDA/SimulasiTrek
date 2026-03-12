@@ -140,7 +140,7 @@
         const steps = [
             { 
                 title: "1. Menentukan Paksi Utama & Pusat Padang", 
-                desc: "Pancang paku di titik paling tengah padang (Datum). Tarik tali paksi melintang dan memanjang sebagai rujukan koordinat awal.",
+                desc: "Pancang paku di titik paling tengah padang (Centre). Tarik tali paksi melintang dan memanjang sebagai rujukan koordinat awal.",
                 setup: () => { drawCenterAxis(); moveCamera(0, 80, 100); } 
             },
             { 
@@ -175,12 +175,12 @@
             },
             { 
                 title: "8. Membina Lengkung Atas Kiri (Titik D ke N)", 
-                desc: "Tancapkan paku pita ukur pada titik J. Tarik pita sejauh JEJARI DALAM ke titik D, dan lukis lengkung sehingga sudut 150° (Titik N).",
+                desc: "Pancangkan paku pita ukur pada titik J. Tarik pita sejauh JEJARI DALAM ke titik D, dan lukis lengkung sehingga sudut 150° (Titik N).",
                 setup: () => { drawAllPaksi(); drawStraightsOnly(); drawCurve_DN(); moveCamera(-currentData.lurus/2, 40, 50); } 
             },
             { 
                 title: "9. Membina Lengkung Bawah Kiri (Titik A ke P)", 
-                desc: "Tancapkan paku pita ukur pada titik K. Tarik pita sejauh JEJARI DALAM ke titik A, dan lukis lengkung sehingga sudut 210° (Titik P).",
+                desc: "Pancangkan paku pita ukur pada titik K. Tarik pita sejauh JEJARI DALAM ke titik A, dan lukis lengkung sehingga sudut 210° (Titik P).",
                 setup: () => { drawAllPaksi(); drawStraightsOnly(); drawCurve_DN(); drawCurve_AP(); moveCamera(-currentData.lurus/2, 40, 50); } 
             },
             { 
@@ -190,12 +190,12 @@
             },
             { 
                 title: "11. Membina Lengkung Kanan (Titik C ke M & B ke L)", 
-                desc: "Beralih ke sebelah kanan padang. Tancapkan paku di F dan lukis C ke M. Kemudian tancapkan paku di E dan lukis B ke L menggunakan JEJARI DALAM.",
+                desc: "Beralih ke sebelah kanan padang. Pancangkan paku di F dan lukis C ke M. Kemudian tetapkan paku di E dan lukis B ke L menggunakan JEJARI DALAM.",
                 setup: () => { drawAllPaksi(); drawStraightsOnly(); drawLeftCurves(); drawCurve_RightSmall(); moveCamera(currentData.lurus/2, 50, 60); } 
             },
             { 
                 title: "12. Menyambung Lengkung Besar Kanan (Titik M ke L)", 
-                desc: "Tancapkan paku di titik G. Tarik pita sejauh JEJARI BESAR ke titik M, dan cantumkan lukisan lengkung ke titik L. Lengkung asas lengkap!",
+                desc: "Pancangkan paku di titik G. Tarik pita sejauh JEJARI BESAR ke titik M, dan cantumkan lukisan lengkung ke titik L. Lengkung asas lengkap!",
                 setup: () => { drawAllPaksi(); drawStraightsOnly(); drawLeftCurves(); drawCurve_RightSmall(); drawCurve_RightBig(); moveCamera(currentData.lurus/2, 55, 70); } 
             },
             { 
